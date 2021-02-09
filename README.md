@@ -1,4 +1,24 @@
-[MDL-70832](https://tracker.moodle.org/browse/MDL-70832)
+# Prerequisites
+
+[guetzli](https://github.com/google/guetzli) for optimize JPEG
+```
+sudo apt install guetzli
+```
+
+[optipng](http://optipng.sourceforge.net/) for optimize PNG
+```
+sudo apt install optipng
+```
+
+[FFmpeg](https://ffmpeg.org/) for optimize MP4
+```
+sudo apt install ffmpeg
+```
+
+[Ghostscript](https://www.ghostscript.com/) for optimize PDF
+```
+sudo apt install ghostscript 
+```
 
 # How to install
 
@@ -18,3 +38,7 @@ cat <<EOF | crontab -
 EOF
 ```
 Access https://yourmoodledomain.com/admin/index.php to finish instalation
+
+# Memories
+
+[MDL-70832](https://tracker.moodle.org/browse/MDL-70832)
