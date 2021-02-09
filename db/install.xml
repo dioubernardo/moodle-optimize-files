@@ -11,8 +11,10 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="contenthash"/>
-        <INDEX NAME="otimized" UNIQUE="false" FIELDS="otimized"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="otimized" UNIQUE="false" FIELDS="otimized"/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>

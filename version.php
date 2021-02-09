@@ -7,4 +7,4 @@ $plugin->requires = 2016052300;
 $plugin->component = 'local_optimizer';
 $plugin->release = '3';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 60;
+$plugin->cron = 0;
