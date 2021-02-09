@@ -4,12 +4,14 @@
    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="optimizer_files" COMMENT="ids to optimize">
+    <TABLE NAME="optimizer_files" COMMENT="files to optimize">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The id of the file"/>
+        <FIELD NAME="contenthash" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" COMMENT="sha1 hash of file content"/>
+        <FIELD NAME="otimized" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" COMMENT="Otimized?"/>
       </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="contenthash"/>
+        <INDEX NAME="otimized" UNIQUE="false" FIELDS="otimized"/>
       </KEYS>
     </TABLE>
   </TABLES>

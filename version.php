@@ -2,9 +2,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2021020900;
+$plugin->version = 2021020902;
 $plugin->requires = 2016052300;
 $plugin->component = 'local_optimizer';
 $plugin->release = '3';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
+$plugin->cron = 60;
