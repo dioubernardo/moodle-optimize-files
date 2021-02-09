@@ -6,7 +6,13 @@ require(__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/clilib.php');
 
 /* Impedir a execução simultanea */
-
+$lockfile = sys_get_temp_dir() . '/optimizer_files.lock';
+$pid = file_get_contents($lockfile);
+if (empty($pid) or posix_getsid($pid) === false) {
+   file_put_contents($lockfile, getmypid());
+} else {
+   exit;
+}
 
 /* Update table optimizer_files */
 $anteriorMaxId = (int)get_config('optimizer', 'maxid');
