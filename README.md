@@ -1,9 +1,13 @@
 # Prerequisites
 
 [guetzli](https://github.com/google/guetzli) for optimize JPEG
+
 [optipng](http://optipng.sourceforge.net/) for optimize PNG
+
 [FFmpeg](https://ffmpeg.org/) for optimize MP4
+
 [Ghostscript](https://www.ghostscript.com/) for optimize PDF
+
 ```
 sudo apt install guetzli optipng ffmpeg ghostscript
 ```
