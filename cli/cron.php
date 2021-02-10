@@ -32,7 +32,8 @@ if ($atualMaxId != $anteriorMaxId){
         where
             id between :min and :max and 
             component != "assignfeedback_editpdf" and
-            mimetype in ("video/mp4","application/pdf","image/png","image/jpeg")
+            mimetype in ("video/mp4","application/pdf","image/png","image/jpeg") and
+            filepath not in ("/thumb/")
 	', [
 		'min' => $anteriorMaxId,
 		'max' => $atualMaxId
