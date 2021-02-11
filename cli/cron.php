@@ -74,7 +74,7 @@ if ($record){
                 $sucesso = executar("/usr/bin/optipng -quiet ".escapeshellarg($originalFile)." -out ".escapeshellarg($tmpFile));
                 break;
             case 'image/jpeg':
-                $sucesso = executar("/usr/bin/guetzli ".escapeshellarg($originalFile)." ".escapeshellarg($tmpFile));
+                $sucesso = executar("/opt/mozjpeg/bin/jpegtran -outfile ".escapeshellarg($tmpFile)." ".escapeshellarg($originalFile));
                 break;
         }
 
