@@ -31,15 +31,19 @@ if ($atualMaxId != $anteriorMaxId){
             {files}
         where
             id between :min and :max and 
-            mimetype in ("video/mp4","application/pdf","image/png","image/jpeg") and
-            component != "assignfeedback_editpdf" and
+            mimetype in ("video/mp4", "application/pdf", "image/png", "image/jpeg") and
+            component not in ("assignfeedback_editpdf", "core", "core_admin") and
             not (component="user" and filearea="icon") and
-            not (component="core" and filearea="preview")
+            not (component="user" and filearea="draft")
 	', [
 		'min' => $anteriorMaxId,
 		'max' => $atualMaxId
 	]);
 }
+
+/* Eliminação dos removidos */
+
+// @TODO: acho que será muito custozo
 
 /* Optimize files */
 $record = $DB->get_record_sql('
