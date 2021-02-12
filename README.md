@@ -1,5 +1,7 @@
 # Prerequisites
 
+[libjpeg-turbo](https://libjpeg-turbo.org/) for optimize JPEG
+
 [optipng](http://optipng.sourceforge.net/) for optimize PNG
 
 [FFmpeg](https://ffmpeg.org/) for optimize MP4
@@ -7,21 +9,7 @@
 [Ghostscript](https://www.ghostscript.com/) for optimize PDF
 
 ```
-sudo apt install optipng ffmpeg ghostscript
-```
-
-[mozjpeg](https://github.com/mozilla/mozjpeg)
-
-```
-apt install cmake autoconf automake libtool nasm make pkg-config git zlib1g-dev libpng-dev
-cd ~
-git clone https://github.com/mozilla/mozjpeg.git
-cd mozjpeg
-mkdir build && cd build
-sudo cmake -G"Unix Makefiles" -DPNG_SUPPORTED=ON ../
-sudo make install
-cd ~
-rm -rf mozjpeg
+sudo apt install libjpeg-turbo-progs optipng ffmpeg ghostscript
 ```
 
 # How to install
