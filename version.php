@@ -2,7 +2,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2021020902;
+$plugin->version = 2021021701;
 $plugin->requires = 2016052300;
 $plugin->component = 'local_optimizer';
 $plugin->release = '3';
