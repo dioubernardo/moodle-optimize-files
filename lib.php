@@ -8,7 +8,6 @@
 function local_optimizer_after_file_created($record){
     global $DB;
     if (
-        $record->userid > 0 and /* @TODO: To solve https://tracker.moodle.org/browse/MDL-70939 */
         $record->component != 'assignfeedback_editpdf' and 
         $record->component != 'core' and
         $record->component != 'core_admin' and
@@ -29,8 +28,8 @@ function local_optimizer_after_file_created($record){
 
 function local_optimizer_after_file_deleted($record){
     global $DB;
+    error_log("deleted: ".var_export($record, true));
     $DB->execute('delete from {optimizer_files} where contenthash=:contenthash', [
         'contenthash' => $record->contenthash
     ]);
-    error_log("deleted: ".var_export($record, true));
 }

@@ -26,52 +26,54 @@ $record = $DB->get_record_sql('
 ');
 if ($record){
 
-    if (empty($record->mimetype)){
-        $DB->delete_records('optimizer_files', ['contenthash' => $record->contenthash]);
-    }else{
+    $originalFile = $CFG->dataroot . '/filedir/' . substr($record->contenthash, 0, 2) . '/' . substr($record->contenthash, 2, 2) . '/' . $record->contenthash;
+    $tmpFile = $tmpFolder.'/of-'.$record->contenthash;
 
-        $originalFile = $CFG->dataroot . '/filedir/' . substr($record->contenthash, 0, 2) . '/' . substr($record->contenthash, 2, 2) . '/' . $record->contenthash;
-        $tmpFile = $tmpFolder.'/of-'.$record->contenthash;
+    /**
+     * Should be used $record->mimetype, but...
+     * See https://tracker.moodle.org/browse/MDL-70939
+     */
+    $correctMimetype = mime_content_type($originalFile);
 
-        switch($record->mimetype){
-            case 'video/mp4':
-                $tmpFile .= '.mp4';
-                $sucesso = executar("/usr/bin/ffmpeg -hide_banner -loglevel error -nostdin -i ".escapeshellarg($originalFile)." ".escapeshellarg($tmpFile));
-                break;
-            case 'application/pdf':
-                $sucesso = executar("/usr/bin/gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dDetectDuplicateImages=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=".escapeshellarg($tmpFile)." ".escapeshellarg($originalFile));
-                break;
-            case 'image/png':
-                $sucesso = executar("/usr/bin/optipng -quiet ".escapeshellarg($originalFile)." -out ".escapeshellarg($tmpFile));
-                break;
-            case 'image/jpeg':
-                $sucesso = executar("/usr/bin/jpegtran -outfile ".escapeshellarg($tmpFile)." ".escapeshellarg($originalFile));
-                break;
-        }
+    switch($originalFile){
+        case 'video/mp4':
+            $tmpFile .= '.mp4';
+            $sucesso = executar("/usr/bin/ffmpeg -hide_banner -loglevel error -nostdin -i ".escapeshellarg($originalFile)." ".escapeshellarg($tmpFile));
+            break;
+        case 'application/pdf':
+            $sucesso = executar("/usr/bin/gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dDetectDuplicateImages=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=".escapeshellarg($tmpFile)." ".escapeshellarg($originalFile));
+            break;
+        case 'image/png':
+            $sucesso = executar("/usr/bin/optipng -quiet ".escapeshellarg($originalFile)." -out ".escapeshellarg($tmpFile));
+            break;
+        case 'image/jpeg':
+            $sucesso = executar("/usr/bin/jpegtran -outfile ".escapeshellarg($tmpFile)." ".escapeshellarg($originalFile));
+            break;
+        default:
+            $sucesso = false;
+    }
 
-        if ($sucesso){
-            $finalsize = filesize($tmpFile);
-            if ($finalsize > 0 and $finalsize < filesize($originalFile)){
-                $perms = fileperms($originalFile);
-                if (rename($tmpFile, $originalFile)){
-                    chown($originalFile, $perms);
+    if ($sucesso){
+        $finalsize = filesize($tmpFile);
+        if ($finalsize > 0 and $finalsize < filesize($originalFile)){
+            $perms = fileperms($originalFile);
+            if (rename($tmpFile, $originalFile)){
+                chown($originalFile, $perms);
 
-                    $DB->execute('update {files} set filesize=:filesize where id=:id', [
-                        'id' => $record->id,
-                        'filesize' => $finalsize
-                    ]);
-                }
+                $DB->execute('update {files} set filesize=:filesize where id=:id', [
+                    'id' => $record->id,
+                    'filesize' => $finalsize
+                ]);
             }
         }
-
-        if (file_exists($tmpFile))
-            unlink($tmpFile);
-
-        $DB->execute('update {optimizer_files} set otimized=1 where contenthash=:contenthash', [
-		    'contenthash' => $record->contenthash
-    	]);
-
     }
+
+    if (file_exists($tmpFile))
+        unlink($tmpFile);
+
+    $DB->execute('update {optimizer_files} set otimized=1 where contenthash=:contenthash', [
+        'contenthash' => $record->contenthash
+    ]);
 
 }
 
