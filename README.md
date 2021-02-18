@@ -34,6 +34,7 @@ Access https://yourmoodledomain.com/admin/index.php to finish instalation
 # Memories
 
 [MDL-70832](https://tracker.moodle.org/browse/MDL-70832)
+
 [MDL-70939](https://tracker.moodle.org/browse/MDL-70939)
 
 # SQL to include existing files to be optimized
