@@ -16,35 +16,6 @@ if (empty($pid) or posix_getsid($pid) === false) {
    exit;
 }
 
-/* Update table optimizer_files */
-$anteriorMaxId = (int)get_config('optimizer', 'maxid');
-$atualMaxId = $DB->get_field_sql('SELECT max(id) from {files}');
-
-if ($atualMaxId != $anteriorMaxId){
-    set_config('maxid', $atualMaxId, 'optimizer');
-    $DB->execute('
-        insert ignore into {optimizer_files}
-        select distinct
-            contenthash,
-            0
-        from
-            {files}
-        where
-            id between :min and :max and 
-            mimetype in ("video/mp4", "application/pdf", "image/png", "image/jpeg") and
-            component not in ("assignfeedback_editpdf", "core", "core_admin") and
-            not (component="user" and filearea="icon") and
-            not (component="user" and filearea="draft")
-	', [
-		'min' => $anteriorMaxId,
-		'max' => $atualMaxId
-	]);
-}
-
-/* Eliminação dos removidos */
-
-// @TODO: acho que será muito custozo
-
 /* Optimize files */
 $record = $DB->get_record_sql('
     select f.id, f.mimetype, of.contenthash
@@ -96,11 +67,7 @@ if ($record){
         if (file_exists($tmpFile))
             unlink($tmpFile);
 
-        $DB->execute('
-            update {optimizer_files}
-            set otimized = 1
-            where contenthash = :contenthash
-	    ', [
+        $DB->execute('update {optimizer_files} set otimized=1 where contenthash=:contenthash', [
 		    'contenthash' => $record->contenthash
     	]);
 
