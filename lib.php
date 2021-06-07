@@ -32,7 +32,7 @@ function local_optimizer_after_file_deleted($record){
     $params = [
         'contenthash' => $record->contenthash
     ];
-    if (!$DB->record_exists_sql('select 1 from mdl_files where contenthash=:contenthash limit 1', $params)){
+    if (!$DB->record_exists_sql('select 1 from mdl_files where contenthash=:contenthash', $params)){
         $DB->execute('delete from {optimizer_files} where contenthash=:contenthash', $params);
     }
 }
