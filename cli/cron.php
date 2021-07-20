@@ -35,7 +35,7 @@ if ($record){
      */
     $correctMimetype = mime_content_type($originalFile);
 
-    switch($originalFile){
+    switch($correctMimetype){
         case 'video/mp4':
             $tmpFile .= '.mp4';
             $sucesso = executar("/usr/bin/ffmpeg -hide_banner -loglevel error -nostdin -i ".escapeshellarg($originalFile)." ".escapeshellarg($tmpFile));
