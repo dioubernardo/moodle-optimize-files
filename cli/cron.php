@@ -18,7 +18,7 @@ if (empty($pid) or posix_getsid($pid) === false) {
 
 /* Optimize files */
 $record = $DB->get_record_sql('
-    select f.id, f.mimetype, of.contenthash
+    select f.mimetype, of.contenthash
     from {optimizer_files} of
     left join {files} f ON f.contenthash = of.contenthash
     where of.otimized = 0
@@ -38,7 +38,7 @@ if ($record){
     switch($correctMimetype){
         case 'video/mp4':
             $tmpFile .= '.mp4';
-            $sucesso = executar("/usr/bin/ffmpeg -hide_banner -loglevel error -nostdin -i ".escapeshellarg($originalFile)." ".escapeshellarg($tmpFile));
+            $sucesso = executar("/usr/bin/ffmpeg -hide_banner -loglevel error -vcodec h264 -acodec aac -strict -2 -nostdin -i ".escapeshellarg($originalFile)." ".escapeshellarg($tmpFile));
             break;
         case 'application/pdf':
             $sucesso = executar("/usr/bin/gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dDetectDuplicateImages=true -dNOPAUSE -dQUIET -dBATCH -sOutputFile=".escapeshellarg($tmpFile)." ".escapeshellarg($originalFile));
@@ -60,8 +60,8 @@ if ($record){
             if (rename($tmpFile, $originalFile)){
                 chown($originalFile, $perms);
 
-                $DB->execute('update {files} set filesize=:filesize where id=:id', [
-                    'id' => $record->id,
+                $DB->execute('update {files} set filesize=:filesize where contenthash=:contenthash', [
+                    'contenthash' => $record->contenthash,
                     'filesize' => $finalsize
                 ]);
             }
